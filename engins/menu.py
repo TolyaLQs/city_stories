@@ -8,7 +8,6 @@ class Menu:
         self.selected_pos = 0
         self.font = pg.font.SysFont('Arial', 32)
         self.small_font = pg.font.SysFont('Arial', 20)
-
         self.menu_buttons = [
             'New game',
             'Load game',
@@ -85,15 +84,16 @@ class Menu:
     def draw(self, screen):
         screen.fill((20, 20, 30))
         title = self.font.render("City Stories", True, (255, 255, 255))
-        title_rect = title.get_rect(center=(self.screen_w // 2, 100))
+        title_rect = title.get_rect(center=(self.screen_w // 2, 10))
         screen.blit(title, title_rect)
 
         for i, text in enumerate(self.buttons):
             color = (255, 215, 0) if i == self.selected_pos else (200, 200, 200)
             label = self.font.render(text, True, color)
-            rect = label.get_rect(center=(self.screen_w // 2, 220 + i * 50))
+            rect = label.get_rect(center=(self.screen_w // 2, 20 + i * 50))
             screen.blit(label, rect)
 
         hint = self.small_font.render("Use arrows / W,S to navigate, Enter to select", True, (128, 128, 128))
         hint_rect = hint.get_rect(midbottom=(self.screen_w // 2, self.screen_h - 20))
         screen.blit(hint, hint_rect)
+
