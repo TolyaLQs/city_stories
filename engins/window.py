@@ -13,13 +13,14 @@ class Windows:
         pg.init()
         if self.full_screen:
             self.screen = pg.display.set_mode(size=(0, 0), flags=pg.FULLSCREEN)
-            self.screen_size = (self.screen_width, self.screen_height) = (self.screen.get_window_size()[0], self.screen.get_window_size()[1])
+            self.screen_size = (self.screen_width, self.screen_height) = (
+                self.screen.get_size()[0], self.screen.get_size()[1])
         else:
             self.screen = pg.display.set_mode(size=self.screen_size)
         self.cycles_state: bool = True
         self.window_state: str = 'menu' # 'menu' or 'game'
         self.menu = Menu(self.screen_size)
-        self.game = Game()
+        self.game = Game(self.screen_size)
         self.clock = pg.Clock()
 
     def run(self):
@@ -33,15 +34,18 @@ class Windows:
                     elif self.window_state == 'game':
                         self.game.handle_event(event)
             if self.window_state == 'menu':
-                self.menu.update()
                 if self.menu.menu_state == 'quit':
                     self.cycles_state = False
                 elif self.menu.menu_state == 'new_game':
                     self.window_state = 'game'
-                    self.game.new_game()
-                self.menu.draw(self.screen)
-            else:
+                    self.game.new_game(self.screen)
+                else:
+                    self.menu.update()
+                    self.menu.draw(self.screen)
+            elif self.window_state == 'game':
                 self.game.game_cycles(self.screen, self.fps)
+                if self.game.game_state == 'quit':
+                    self.cycles_state = False
 
             pg.display.flip()
             self.clock.tick(self.fps)
